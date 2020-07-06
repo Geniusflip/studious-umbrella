@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import Note from './Note';
 
-const data = [
+let data = [
 `## System design notes 
 Outline use cases, assumptions, and constraints.
 
@@ -12,6 +12,7 @@ How to approach a system design question.
 * How are they going to use it?
 * How many users are there?
 * What does the system do?
+[Link to something](internal-1)
 * What are the inputs and outputs of the system?
 * How much data do we expect to handle?
 * How many requests per second do we expect?
@@ -143,7 +144,10 @@ Users submit their work to Borg in the forms of jobs - consisting of on or more 
   
 ]
 function App() {
+	const [notes, setNotes] = useState([data[0]]);
 	const [scrollX, setScrollX] = useState(0)
+	const [readOnly, setReadOnly] = useState(true);
+
 	useEffect(() => {
 		const handleScroll = () => {
 			setScrollX(window.scrollX);
@@ -152,7 +156,13 @@ function App() {
 	}, [])
   return (
     <div className="App">
-      {data.map((val, i) => <Note key={i} data={val} offset={i}></Note>)}
+		<span className="edit" onClick={() => setReadOnly(val => !val)}>{readOnly ? '✏️' : '💾'}</span>
+		<div className='topbar'>
+			Notes
+		</div>
+		<div className='notes-container'>
+		{<Note key={0} data={notes[0]} rest={notes.slice(1, notes.length)} setNotes={setNotes} scrollX={scrollX} readOnly={readOnly} setReadOnly={setReadOnly} offset={0}></Note>}
+		</div>
     </div>
   );
 }

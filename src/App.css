@@ -11,46 +11,96 @@ body {
   display: flex;
   min-height: 100vh;
 
-  flex-direction: row;
+  flex-direction: column;
 }
 
+.notes-container {
+  display: flex;
+  flex-direction: row;
+}
 .Note {
-  overflow-y: scroll;
-  max-width: 500px;
+  display: flex;
+  flex-direction: row;
   background-color: #282c34;
-  min-width: 500px;
   height: 100vh;
   transition: box-shadow 0.2s ease;
-  
+  position: relative;
 }
 
 pre {
   white-space: pre-line;
 }
+
+a {
+  color: rgb(113, 194, 221)
+}
+#block-menu-container, #link-search-results { background-color: #FFF;}
+.heading-name { color: #FFF; }
+.sc-AxirZ {
+  z-index: 1000;
+}
 .bar {
-  opacity: 0;
+  background-color: #282c34;
   z-index: 100;
-  padding-top: 20px;
+  cursor: pointer;
   font-size: large;
   font-weight: 500;
   transition: opacity 0.2s ease-in-out;
   width: 40px;
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  height: 100%;
   box-sizing: border-box;
-  position: fixed;
   top: 0;
+  padding-top: 80px;
   align-items: center;
   display: flex;
+  position: sticky;
+}
+.topbar {
+  display: flex;
+  z-index: 10000;
+  flex-direction: row-reverse;
+  position: fixed;
+  font-size: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100vw;
+  font-weight: 300;
+  background:#282c34 ;
+  border-bottom: 0.5px solid rgb(53, 56, 65);
+}
+.edit {
+  border-radius: 4px;
+  top: calc(100vh - 100px);
+  right: 50px;
+  position: fixed;
+  z-index: 1000;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  padding: 5px;
+  box-shadow: rgba(108, 108, 108, 0.41) 0px 0px 3px 2px
+}
+.edit:hover {
+  box-shadow:  rgba(108, 108, 108, 0.41) 0px 0px 0px 0px;
+  transition: all 0.2s ease;
 }
 .content {
   transition: opacity 0.2s ease-in-out;
-  padding: 40px;
+  padding-left: 30px;
+  padding-right: 10px;
+  position: sticky;
+  padding-top: 20px;
+  min-width: 500px;
+  padding-top: 100px;
+  width: 500px;
 }
-.Container { 
+.container { 
   display: flex;
   flex-direction: row;
-  width: 100vw;
-  overflow: scroll;
+  transition: box-shadow 0.2s ease-in;
+  background-color: #282c34;
 }
