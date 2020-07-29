@@ -1,170 +1,72 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import Note from './Note';
+import Note from './components/note/Note';
+import * as firebase from "firebase/app";
+import "firebase/analytics";
+import "firebase/firestore";
+import "firebase/auth";
+import config from './config.json'
+import { useCollection } from 'react-firebase-hooks/firestore';
 
-let data = [
-`## System design notes 
-Outline use cases, assumptions, and constraints.
+firebase.initializeApp(config.firebase);
+let user= {};
+var provider = new firebase.auth.GoogleAuthProvider();
+if (window.location.pathname.includes('login')) {
+	firebase.auth().signInWithPopup(provider).then(function(result) {
+		let user = result.user;
+		if (!config.allowedUsers.includes(user.email)) {
+			firebase.auth().signOut();
+		}
+		window.location.href = `${window.location.origin}/notes/0`;
+	})
+}
+firebase.auth().onAuthStateChanged(u => {
+	if (!user) { return }
+	user = u;
+});
 
-How to approach a system design question.
-
-* Who is going to use it?
-* How are they going to use it?
-* How many users are there?
-* What does the system do?
-[Link to something](internal-1)
-* What are the inputs and outputs of the system?
-* How much data do we expect to handle?
-* How many requests per second do we expect?
-* What is the expected read to write ratio?
-
-A service is scalable if it results in increased performance in a manner proportional to resources allocated.`,
-`## Types of consistency 
-
-- Weak consistency - Maybe reads will read a write - real time games
-- Eventual consistency - Reads will eventually see it - i.e email
-- Strong consistency - Reads will see writes - .i.e Filesystem. Works well with transactions.
-`,
-`## Types of Availability
-
-Fail over:
-
-	- Active-passive 
-		A heartbeat is sent between an active and passive server, when the heartbeat stops, the passive starts. Only the active server handles traffic. Downtime is determined by hot or cold state of the passive server.
-	- Active-active
-		Both servers are handling traffic, load balanced between the two. DNS needs to know about both.
-	Disadvantages
-		- More hardware, additional complexity.
-		- Potential loss of data.
-`,
-`## Availability in numbers:
-Availability is often quantified by uptime as a percentage of when the service is available, generally measured in 9’s
-
-99.9% - 8h per year of down time, 99.99% 60 minutes of downtime.
-
-Availability in parallel vs sequence
-If a service consists of multiple components prone to failure , the services overall availability depends on whether the components are in sequence or in parallel. In sequence A*B. 
-Availability increases when two services with <100% availability are in parallel. 
-1 - ( 1- A ) * (1 -B)
-`,
-`## Borg White-paper
-
-Large-scale cluster management at Google with Borg
-
-- Cluster manager
-- Hundreds of thousands of jobs.
-
-Achieves high utilisation by combining
-- Admission control
-- Efficient task-packing
-- Over-commitment,
-- And machine sharing with process level performance isolation.
-
-Supports high availability application, and mimnimises fault recovers time.
-
-Offers a declarative job specification, name service integration, real time job monitoring, and analysis tools.
-
-Provides three main benefits
-    1. Hides the details of resource management and failure handling so its users can focus on application dev - separation of concerns.
-    2. High reliability and availability. — Ding Ding Ding — consistency ? (CAP theorem)
-	 3. Efficiently distributed.
-
-
-
-Users submit their work to Borg in the forms of jobs - consisting of on or more tasks. Each job runs in one Borg cell (pod) `
-,`## System design notes 
-Outline use cases, assumptions, and constraints.
-
-How to approach a system design question.
-
-* Who is going to use it?
-* How are they going to use it?
-* How many users are there?
-* What does the system do?
-* What are the inputs and outputs of the system?
-* How much data do we expect to handle?
-* How many requests per second do we expect?
-* What is the expected read to write ratio?
-
-A service is scalable if it results in increased performance in a manner proportional to resources allocated.`,
-`## Types of consistency 
-
-- Weak consistency - Maybe reads will read a write - real time games
-- Eventual consistency - Reads will eventually see it - i.e email
-- Strong consistency - Reads will see writes - .i.e Filesystem. Works well with transactions.
-`,
-`## Types of Availability
-
-Fail over:
-
-	- Active-passive 
-		A heartbeat is sent between an active and passive server, when the heartbeat stops, the passive starts. Only the active server handles traffic. Downtime is determined by hot or cold state of the passive server.
-	- Active-active
-		Both servers are handling traffic, load balanced between the two. DNS needs to know about both.
-	Disadvantages
-		- More hardware, additional complexity.
-		- Potential loss of data.
-`,
-`## Availability in numbers:
-Availability is often quantified by uptime as a percentage of when the service is available, generally measured in 9’s
-
-99.9% - 8h per year of down time, 99.99% 60 minutes of downtime.
-
-Availability in parallel vs sequence
-If a service consists of multiple components prone to failure , the services overall availability depends on whether the components are in sequence or in parallel. In sequence A*B. 
-Availability increases when two services with <100% availability are in parallel. 
-1 - ( 1- A ) * (1 -B)
-`,
-`## Borg White-paper
-
-Large-scale cluster management at Google with Borg
-
-- Cluster manager
-- Hundreds of thousands of jobs.
-
-Achieves high utilisation by combining
-- Admission control
-- Efficient task-packing
-- Over-commitment,
-- And machine sharing with process level performance isolation.
-
-Supports high availability application, and mimnimises fault recovers time.
-
-Offers a declarative job specification, name service integration, real time job monitoring, and analysis tools.
-
-Provides three main benefits
-    1. Hides the details of resource management and failure handling so its users can focus on application dev - separation of concerns.
-    2. High reliability and availability. — Ding Ding Ding — consistency ? (CAP theorem)
-	 3. Efficiently distributed.
-
-
-
-Users submit their work to Borg in the forms of jobs - consisting of on or more tasks. Each job runs in one Borg cell (pod) `
-
-  
-]
 function App() {
-	const [notes, setNotes] = useState([data[0]]);
+	const [idList, setIdList] = useState([window.location.pathname.split('/').reverse()[0] || 0]);
+	const [notes, setNotes] = useState([]);
 	const [scrollX, setScrollX] = useState(0)
-	const [readOnly, setReadOnly] = useState(true);
-
+	const [value, loading, error] = useCollection(
+		firebase.firestore().collection('notes'),
+		{ snapshotListenOptions: { includeMetadataChanges: true }}
+	);
 	useEffect(() => {
 		const handleScroll = () => {
 			setScrollX(window.scrollX);
 		}
 		window.addEventListener('scroll', handleScroll);
-	}, [])
-  return (
-    <div className="App">
-		<span className="edit" onClick={() => setReadOnly(val => !val)}>{readOnly ? '✏️' : '💾'}</span>
-		<div className='topbar'>
-			Notes
+	}, []);
+	useEffect(() => {
+		let data = [];
+		if (value && !loading) {
+			data = value.docs;
+		}
+		setNotes(data)
+	}, [loading, value]);
+	const loggedIn = !!user && Object.keys(user).length;
+	return (
+		<div className="App">
+			<div className='topbar'>
+				{ !!loggedIn && <img className="userPhoto" src={(user || {}).photoURL}></img>}
+				<div className="title">{loggedIn ? `${(user || {}).displayName.split(' ')[0]}'s` : null} Notes</div>
+			</div>
+			<div className='notes-container'>
+				<Note 
+					key={0} 
+					docId={window.location.pathname.split('/').reverse()[0] || '0'} 
+					idList={idList}
+					setIdList={setIdList}  
+					offset={0}
+					notes={notes}
+					loggedIn={loggedIn}
+				>
+				</Note>
+			</div>
 		</div>
-		<div className='notes-container'>
-		{<Note key={0} data={notes[0]} rest={notes.slice(1, notes.length)} setNotes={setNotes} scrollX={scrollX} readOnly={readOnly} setReadOnly={setReadOnly} offset={0}></Note>}
-		</div>
-    </div>
-  );
+	);
 }
 
 export default App;

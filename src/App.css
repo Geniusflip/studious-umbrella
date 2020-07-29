@@ -17,6 +17,7 @@ body {
 .notes-container {
   display: flex;
   flex-direction: row;
+  background-color: #2c313a;
 }
 .Note {
   display: flex;
@@ -62,12 +63,47 @@ a {
   flex-direction: row-reverse;
   position: fixed;
   font-size: 20px;
-  padding: 10px;
+  padding: 12px;
   box-sizing: border-box;
   width: 100vw;
   font-weight: 300;
-  background:#282c34 ;
+  background:#282c34;
   border-bottom: 0.5px solid rgb(53, 56, 65);
+}
+.title {
+  display: flex;
+  align-items: center;
+}
+.button  {
+  padding: 5px;
+  height: 20px;
+  width: 20px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.button:hover {
+  background-color: #3e444f;
+}
+.add {
+  font-size: larger;
+  margin-left: 15px;
+  line-height: 1;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  border-radius: 50%;
+}
+.add span {
+  display: inline-block;
+  vertical-align: middle;
+  height: 25px;
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
 }
 .edit {
   border-radius: 4px;
@@ -91,6 +127,9 @@ a {
 .content {
   transition: opacity 0.2s ease-in-out;
   padding-left: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   padding-right: 10px;
   position: sticky;
   padding-top: 20px;
@@ -98,9 +137,65 @@ a {
   padding-top: 100px;
   width: 500px;
 }
+.editor-container {
+  flex-grow: 1;
+  height: 100%;
+  overflow: scroll;
+}
+.editor-container::-webkit-scrollbar {
+  display: none;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 .container { 
   display: flex;
   flex-direction: row;
   transition: box-shadow 0.2s ease-in;
   background-color: #282c34;
+}
+.ProseMirror {
+  padding-bottom: 50px;
+}
+.container.floating {
+  box-shadow: rgba(108, 108, 108, 0.41) 1px 2px 10px 3px;
+}
+.userPhoto {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  margin-left: 15px;
+  border: 2px solid white;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background-color: #2c313b;
+  border-radius: 5px;
+  padding: 20px;
+}
+.links-title {
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  padding-bottom: 10px;
+}
+
+.card {
+  padding: 20px;
+  min-width: 40%;
+  max-width: 40%;
+  margin: 10px 0;
+  cursor: pointer;
+}
+.card:hover {
+  background-color: #30353f;
+}
+.card-title {
+  margin-bottom: 5px;
+}
+.card-content { 
+  font-size: 14px;
+  color: #bbb;
 }
