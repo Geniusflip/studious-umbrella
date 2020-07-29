@@ -1,6 +1,6 @@
 ## About
 
-An open source React imitation of Andy Muchutaks Greenfield Notes system.
+An open source React replica of Andy Mutuschaks Greenfield Notes system.
 
 ## TODO
 
@@ -12,3 +12,8 @@ An open source React imitation of Andy Muchutaks Greenfield Notes system.
         lastUpdated: true,
     }
 - Anki based card system?
+- Service workers? 
+- Clean up package.json
+- Resolve known issues.
+- Host my own notes somewhere
+- Example config
