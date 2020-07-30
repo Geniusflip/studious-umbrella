@@ -17,7 +17,7 @@ if (window.location.pathname.includes('login')) {
 		if (!config.allowedUsers.includes(user.email)) {
 			firebase.auth().signOut();
 		}
-		window.location.href = `${window.location.origin}/notes/0`;
+		window.location.href = `${window.location.origin}/0`;
 	})
 }
 firebase.auth().onAuthStateChanged(u => {

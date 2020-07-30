@@ -1,3 +1,5 @@
+import config from '../config.json'
+
 const searchHandler = (notes) => {
 	return async (searchTerm) => {
 		if (!notes.length) return [];
@@ -10,7 +12,7 @@ const searchHandler = (notes) => {
 				.replace(/[^\w\s-]*/, "")
 				.slice(0, 256)
 				.trimStart(),
-			url: `${window.location.origin}/notes/${result.id}`,
+			url: `${config.internalUrlPrefex}/${result.id}`,
 		}));
 	}
 }

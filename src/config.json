@@ -9,5 +9,6 @@
         "appId": "1:37080251506:web:85de324467408eb9ba96eb",
         "measurementId": "G-FN1ZERD44Q"
     },
-    "allowedUsers": ["ryanherford@gmail.com"]
+    "allowedUsers": ["ryanherford@gmail.com"],
+    "internalUrlPrefex": "http://internal"
 }  

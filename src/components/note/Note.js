@@ -12,6 +12,7 @@ import editSVG from "../../assets/edit.svg";
 import saveSVG from "../../assets/save.svg";
 import deleteSVG from "../../assets/delete.svg";
 import externalSVG from "../../assets/external.svg";
+import config from '../../config.json'
 
 function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
   const [saveNote, setSaveNote] = useState("");
@@ -28,7 +29,7 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
   const close = () => setIdList((list) => list.slice(0, offset));
   const addNote = async (title) => {
 		const noteId = v4();
-		const link = `${window.location.origin}/notes/${noteId}`
+		const link = `${config.internalUrlPrefix}/${noteId}`
     value.ref.set({ content: saveNote + `\n[${title || 'New Note'}](${link})`});
 		setIdList(idlist => [...idlist.slice(0, offset + 1), noteId]);
 		return link;
@@ -44,7 +45,7 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
 		{ label: saveSVG, clickFn: () => save(), conditional: !readOnly},
 		// { label: addSVG, clickFn: () => addNote() , conditional: true},
 		{ label: deleteSVG, clickFn: () => deleteNote() , conditional: offset },
-		{ label: externalSVG, clickFn: () => window.location.href = `${window.location.origin}/notes/${docId}`, conditional: true },
+		{ label: externalSVG, clickFn: () => window.location.href = `${window.location.origin}/${docId}`, conditional: true },
 	];
 
   const showBar = window.scrollX >= offset * 580;
@@ -53,7 +54,7 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
     window.scrollX >= (offset - 1) * 600 - offset * 40 &&
     window.scrollX <= offset * 580 &&
 		!showBar;
-	const links = (content.split(`${window.location.origin}/notes/`) || []).slice(1);
+	const links = (content.split(`${config.internalUrl}`) || []).slice(1);
   return (
     <div className="Note" style={{}}>
       <div className={`container ${showShadow ? "floating" : ""}`}>
