@@ -7,7 +7,6 @@ import { clickHandler } from "../../utils/internalLinkHandler";
 import TitleBar from './TitleBar'
 import SideBar from './SideBar'
 import MarkdownEditor from "./MarkdownEditor";
-import addSVG from "../../assets/add.svg";
 import closeSVG from "../../assets/close.svg";
 import editSVG from "../../assets/edit.svg";
 import saveSVG from "../../assets/save.svg";
@@ -17,7 +16,7 @@ import externalSVG from "../../assets/external.svg";
 function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
   const [saveNote, setSaveNote] = useState("");
   const [readOnly, setReadOnly] = useState(true);
-  const [value, loading, error] = useDocument(
+  const [value] = useDocument(
     firebase.firestore().doc(`notes/${docId}`),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );

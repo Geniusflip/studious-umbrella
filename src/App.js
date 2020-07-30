@@ -29,7 +29,7 @@ function App() {
 	const [idList, setIdList] = useState([window.location.pathname.split('/').reverse()[0] || 0]);
 	const [notes, setNotes] = useState([]);
 	const [scrollX, setScrollX] = useState(0)
-	const [value, loading, error] = useCollection(
+	const [value, loading] = useCollection(
 		firebase.firestore().collection('notes'),
 		{ snapshotListenOptions: { includeMetadataChanges: true }}
 	);
@@ -50,7 +50,7 @@ function App() {
 	return (
 		<div className="App">
 			<div className='topbar'>
-				{ !!loggedIn && <img className="userPhoto" src={(user || {}).photoURL}></img>}
+				{ !!loggedIn && <img className="userPhoto" alt="profilePic" src={(user || {}).photoURL}></img>}
 				<div className="title">{loggedIn ? `${(user || {}).displayName.split(' ')[0]}'s` : null} Notes</div>
 			</div>
 			<div className='notes-container'>
@@ -62,6 +62,7 @@ function App() {
 					offset={0}
 					notes={notes}
 					loggedIn={loggedIn}
+					scrollX={scrollX}
 				>
 				</Note>
 			</div>
