@@ -12,7 +12,7 @@ const searchHandler = (notes) => {
 				.replace(/[^\w\s-]*/, "")
 				.slice(0, 256)
 				.trimStart(),
-			url: `${config.saveUrlPrefex}/${result.id}`,
+			url: `${config.saveUrlPrefex}/?n=${result.id}`,
 		}));
 	}
 }

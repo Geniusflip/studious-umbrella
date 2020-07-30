@@ -23,13 +23,13 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
   );
   const content = value ? (value.data() || {}).content.replace(config.saveUrlPrefix, config.internalUrlPrefix) || "## New Note" : "";
   const save = () => {
-    if (value) { value.ref.set({ content: saveNote }); }
+    if (value) { value.ref.set({ content: saveNote.replace(config.internalUrlPrefix, config.saveUrlPrefix) }); }
 		setReadOnly(true);
   };
   const close = () => setIdList((list) => list.slice(0, offset));
   const addNote = async (title) => {
 		const noteId = v4();
-		const link = `${config.internalUrlPrefix}/${noteId}`
+		const link = `${config.internalUrlPrefix}?n=${noteId}`
     value.ref.set({ content: saveNote + `\n[${title || 'New Note'}](${link})`});
 		setIdList(idlist => [...idlist.slice(0, offset + 1), noteId]);
 		return link;
@@ -45,7 +45,7 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
 		{ label: saveSVG, clickFn: () => save(), conditional: loggedIn && !readOnly},
 		// { label: addSVG, clickFn: () => addNote() , conditional: true},
 		{ label: deleteSVG, clickFn: () => deleteNote() , conditional: loggedIn && offset },
-		{ label: externalSVG, clickFn: () => window.location.href = `${window.location.origin}/${docId}`, conditional: true },
+		{ label: externalSVG, clickFn: () => window.location.href = `${window.location.origin}/?n=${docId}`, conditional: true },
 	];
 
   const showBar = window.scrollX >= offset * 580;
@@ -54,7 +54,7 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
     window.scrollX >= (offset - 1) * 600 - offset * 40 &&
     window.scrollX <= offset * 580 &&
 		!showBar;
-	const links = (content.split(`${config.internalUrlPrefix}/`) || []).slice(1);
+	const links = (content.split(`${config.internalUrlPrefix}/?n=`) || []).slice(1);
   return (
     <div className="Note" style={{}}>
       <div className={`container ${showShadow ? "floating" : ""}`}>

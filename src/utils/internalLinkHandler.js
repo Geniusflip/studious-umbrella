@@ -27,7 +27,7 @@ const internalLinkHandler = (offset, setIdList, idList) => {
 				offset,
 				setIdList,
 				idList,
-				href.replace(href.split("/").reverse().slice(1).reverse().join('/'), "").replace("/", "")
+				new URL(href).searchParams.get('n'),
 			);
 		} else {
 			window.location.href = href;

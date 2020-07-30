@@ -11,13 +11,13 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 firebase.initializeApp(config.firebase);
 let user= {};
 var provider = new firebase.auth.GoogleAuthProvider();
-if (window.location.pathname.includes('login')) {
+if (new URL(window.location.href).searchParams.get('login')) {
 	firebase.auth().signInWithPopup(provider).then(function(result) {
 		let user = result.user;
 		if (!config.allowedUsers.includes(user.email)) {
 			firebase.auth().signOut();
 		}
-		window.location.href = `${window.location.origin}/0`;
+		window.location.href = `${window.location.origin}?id=0`;
 	})
 }
 firebase.auth().onAuthStateChanged(u => {
@@ -26,7 +26,7 @@ firebase.auth().onAuthStateChanged(u => {
 });
 
 function App() {
-	const [idList, setIdList] = useState([window.location.pathname.split('/').reverse()[0] || 0]);
+	const [idList, setIdList] = useState([new URL(window.location.href).searchParams.get('n') || 0]);
 	const [notes, setNotes] = useState([]);
 	const [scrollX, setScrollX] = useState(0)
 	const [value, loading] = useCollection(
@@ -56,7 +56,7 @@ function App() {
 			<div className='notes-container'>
 				<Note 
 					key={0} 
-					docId={window.location.pathname.split('/').reverse()[0] || '0'} 
+					docId={idList[0] || '0'} 
 					idList={idList}
 					setIdList={setIdList}  
 					offset={0}
