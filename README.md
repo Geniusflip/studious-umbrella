@@ -15,4 +15,3 @@ An open source React replica of Andy Mutuschaks Greenfield Notes system.
 - Service workers? 
 - Clean up package.json
 - Resolve known issues.
-- Example config
