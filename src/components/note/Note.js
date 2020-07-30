@@ -21,9 +21,9 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
     firebase.firestore().doc(`notes/${docId}`),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
-  const content = value ? (value.data() || {}).content.replace(config.saveUrlPrefix, config.internalUrlPrefix) || "## New Note" : "";
+  const content = value ? (value.data() || {}).content.replace(new RegExp(config.saveUrlPrefix, 'g'), config.internalUrlPrefix) || "## New Note" : "";
   const save = () => {
-    if (value) { value.ref.set({ content: saveNote.replace(config.internalUrlPrefix, config.saveUrlPrefix) }); }
+    if (value) { value.ref.set({ content: saveNote.replace(new RegExp(config.internalUrlPrefix, 'g'), config.saveUrlPrefix) }); }
 		setReadOnly(true);
   };
   const close = () => setIdList((list) => list.slice(0, offset));
