@@ -1,4 +1,4 @@
-import config from '../config.json'
+import { config } from '../config'
 
 const searchHandler = (notes) => {
 	return async (searchTerm) => {
@@ -12,7 +12,7 @@ const searchHandler = (notes) => {
 				.replace(/[^\w\s-]*/, "")
 				.slice(0, 256)
 				.trimStart(),
-			url: `${config.internalUrlPrefex}/${result.id}`,
+			url: `${config.saveUrlPrefex}/${result.id}`,
 		}));
 	}
 }

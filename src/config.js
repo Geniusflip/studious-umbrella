@@ -1,4 +1,4 @@
-{
+const config = {
     "firebase": {
         "apiKey": "AIzaSyAUXZz4ir-SrfgiHPRIPXIFO7HmjD7SrEg",
         "authDomain": "notes-b1de2.firebaseapp.com",
@@ -10,5 +10,9 @@
         "measurementId": "G-FN1ZERD44Q"
     },
     "allowedUsers": ["ryanherford@gmail.com"],
-    "internalUrlPrefex": "http://internal"
+    "internalUrlPrefix": window.location.origin,
+    "saveUrlPrefix": "http://internal",
 }  
+export {
+   config,
+} 

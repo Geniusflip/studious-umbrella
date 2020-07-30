@@ -12,7 +12,7 @@ import editSVG from "../../assets/edit.svg";
 import saveSVG from "../../assets/save.svg";
 import deleteSVG from "../../assets/delete.svg";
 import externalSVG from "../../assets/external.svg";
-import config from '../../config.json'
+import { config } from '../../config'
 
 function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
   const [saveNote, setSaveNote] = useState("");
@@ -21,7 +21,7 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
     firebase.firestore().doc(`notes/${docId}`),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
-  const content = value ? (value.data() || {}).content || "## New Note" : "";
+  const content = value ? (value.data() || {}).content.replace(config.saveUrlPrefix, config.internalUrlPrefix) || "## New Note" : "";
   const save = () => {
     if (value) { value.ref.set({ content: saveNote }); }
 		setReadOnly(true);
@@ -41,10 +41,10 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
 	useEffect(() => setSaveNote(content), [content]);
   const buttons = [
 		{ label: closeSVG, clickFn: () => close(), conditional: offset},
-		{ label: editSVG, clickFn: () => setReadOnly(false), conditional: readOnly},
-		{ label: saveSVG, clickFn: () => save(), conditional: !readOnly},
+		{ label: editSVG, clickFn: () => setReadOnly(false), conditional: loggedIn && readOnly},
+		{ label: saveSVG, clickFn: () => save(), conditional: loggedIn && !readOnly},
 		// { label: addSVG, clickFn: () => addNote() , conditional: true},
-		{ label: deleteSVG, clickFn: () => deleteNote() , conditional: offset },
+		{ label: deleteSVG, clickFn: () => deleteNote() , conditional: loggedIn && offset },
 		{ label: externalSVG, clickFn: () => window.location.href = `${window.location.origin}/${docId}`, conditional: true },
 	];
 
@@ -54,7 +54,7 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
     window.scrollX >= (offset - 1) * 600 - offset * 40 &&
     window.scrollX <= offset * 580 &&
 		!showBar;
-	const links = (content.split(`${config.internalUrl}`) || []).slice(1);
+	const links = (content.split(`${config.internalUrlPrefix}/`) || []).slice(1);
   return (
     <div className="Note" style={{}}>
       <div className={`container ${showShadow ? "floating" : ""}`}>
@@ -96,7 +96,7 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
 					</div>
 				}
 				</div>
-					{!!loggedIn && <SideBar buttons={buttons}></SideBar>}
+				<SideBar buttons={buttons}></SideBar>
         </div>
         {!!idList[offset + 1] && (
           <Note

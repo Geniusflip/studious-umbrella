@@ -5,7 +5,7 @@ import * as firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/firestore";
 import "firebase/auth";
-import config from './config.json'
+import { config } from './config'
 import { useCollection } from 'react-firebase-hooks/firestore';
 
 firebase.initializeApp(config.firebase);

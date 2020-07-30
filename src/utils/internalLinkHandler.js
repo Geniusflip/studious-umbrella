@@ -1,5 +1,5 @@
 import { scrollLeft } from './scrollHelper';
-import config from '../config.json'
+import { config } from '../config'
 
 
 const clickHandler = (event, offset, setIdList, idList, link) => {
@@ -21,7 +21,7 @@ const clickHandler = (event, offset, setIdList, idList, link) => {
 
 const internalLinkHandler = (offset, setIdList, idList) => {
 	return (href) => {
-		if (href.includes(config.internalUrlPrefex)) {
+		if (href.includes(config.internalUrlPrefix)) {
 			clickHandler(
 				undefined,
 				offset,
