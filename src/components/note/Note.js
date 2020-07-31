@@ -21,7 +21,7 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
     firebase.firestore().doc(`notes/${docId}`),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
-  const content = value ? (value.data() || {}).content.replace(new RegExp(config.saveUrlPrefix, 'g'), config.internalUrlPrefix) || "## New Note" : "";
+  const content = value ? ((value.data() || {}).content || '').replace(new RegExp(config.saveUrlPrefix, 'g'), config.internalUrlPrefix) || "## New Note" : "";
   const save = () => {
     if (value) { value.ref.set({ content: saveNote.replace(new RegExp(config.internalUrlPrefix, 'g'), config.saveUrlPrefix) }); }
 		setReadOnly(true);
@@ -35,8 +35,11 @@ function Note({ docId, idList, setIdList, offset, notes, loggedIn }) {
 		return link;
 	};
 	const deleteNote = async () => {
-		await value.ref.delete();
-		close();
+		const result = window.confirm("Are you sure you want to delete this note?")
+		if (result) {
+			await value.ref.delete();
+			close();
+		}
 	}
 	useEffect(() => setSaveNote(content), [content]);
   const buttons = [
